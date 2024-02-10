@@ -8,7 +8,10 @@ namespace BetterYoutubeDownloader
 {
     public class Menu
     {
-        public int interactveMenu(List<string> options)
+        private List<string> options;
+        public Menu(List<string> options) { this.options = options; }
+        public Menu() { options = new List<string>() {"No Options Provided" }; }
+        public int displayMenu()
         {
             int index = 0;
             writeMenu(options, index, false);
