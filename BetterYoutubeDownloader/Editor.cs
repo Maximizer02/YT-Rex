@@ -69,10 +69,12 @@ namespace BetterYoutubeDownloader
                         case 1:
                             Console.WriteLine("Please enter new Artist name:");
                             string newArtist = Console.ReadLine();
-                            if (tag.Artists.Value.Count == 0)
-                                tag.Artists.Value.Add(newArtist);
-                            else
-                                tag.Artists.Value[0] = newArtist;
+                            string[] newArtists = newArtist!.Split("||");
+                            tag.Artists.Value.Clear();
+                            foreach (string artist in newArtists)
+                            tag.Artists.Value.Add(artist);
+
+                        
                             break;
                         case 2: Console.WriteLine("Please enter new Album name:"); tag.Album = Console.ReadLine(); break;
                         case 3: Console.WriteLine("Please enter new Year:"); tag.Year.Value = int.Parse(Console.ReadLine()); break;
