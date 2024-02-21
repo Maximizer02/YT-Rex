@@ -35,7 +35,7 @@ while(selected!=MainMenuItems.Count-1);
 
 void about()
 {
-    Console.WriteLine("\nBetter Youtube Downloader Version 1.1");
+    Console.WriteLine("\nBetter Youtube Downloader Version 1.2");
     Console.WriteLine("\nProject written by Maximizer02");
     Console.WriteLine(" > Github: https://github.com/Maximizer02");
     Console.WriteLine("\nPowered by yt-dlp, FFmpeg and ID3.NET");
