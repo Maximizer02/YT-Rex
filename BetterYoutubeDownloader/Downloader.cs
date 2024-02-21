@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace BetterYoutubeDownloader
 {
@@ -15,7 +11,11 @@ namespace BetterYoutubeDownloader
         {
             do
             {
-                ytdlp(getValidLink(), "-f mp4 -P ~/Videos/YoutubeDownloads ");
+                string youtubeFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Videos\YoutubeDownloads";
+                string[] alreadyDownloadedMedia = Directory.GetFiles(youtubeFolder);
+                ytdlp(getValidLink(), "-f mp4 --restrict-filenames -P ~/Videos/YoutubeDownloads ");
+                sanitizeFilenameAndEdit(youtubeFolder, alreadyDownloadedMedia, false);
+
                 Console.WriteLine("Download another?");
             } while (menu.displayMenu() == 0);
             Console.WriteLine();
@@ -25,9 +25,10 @@ namespace BetterYoutubeDownloader
         {
             do
             {
-                ytdlp(getValidLink(), "-x --audio-format mp3 --embed-thumbnail --embed-metadata -P ~/Music/YoutubeDownloads ");
-                Console.WriteLine("Edit Metadata?");
-                if (menu.displayMenu() == 0) editor.editMetadataFromConsoleInput();
+                string youtubeFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Music\YoutubeDownloads";
+                string[] alreadyDownloadedMedia = Directory.GetFiles(youtubeFolder);
+                ytdlp(getValidLink(), "-x --audio-format mp3 --restrict-filenames --embed-thumbnail --embed-metadata -P ~/Music/YoutubeDownloads ");
+                sanitizeFilenameAndEdit(youtubeFolder, alreadyDownloadedMedia,true);
                 Console.WriteLine("Download another?");
             } while (menu.displayMenu() == 0);
             Console.WriteLine();
@@ -77,6 +78,34 @@ namespace BetterYoutubeDownloader
             Uri uriResult;
             return Uri.TryCreate(link, UriKind.Absolute, out uriResult)
                 && uriResult.Scheme == Uri.UriSchemeHttps;
+        }
+
+        private void sanitizeFilenameAndEdit(string youtubeFolder, string[] alreadyDownloadedMedia,bool edit) 
+        {
+            try
+            {
+                string[] alreadyDownloadedMediaIncludingNew = Directory.GetFiles(youtubeFolder);
+                string newFileName = alreadyDownloadedMediaIncludingNew.Where(x => !alreadyDownloadedMedia.Contains(x)).First();
+                string newFileNameSanitized = Regex.Replace(newFileName, @"\[(.*?)\]", "");
+                File.Move(newFileName, newFileNameSanitized);
+                if (edit) 
+                { 
+                    Console.WriteLine("Edit Metadata?");
+                    if (menu.displayMenu() == 0) editor.editMetadataFromPath(newFileNameSanitized);
+                }
+            }
+            catch (IOException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Cannot sanitize file name, file already exists!");
+                Console.ResetColor();
+            }
+            catch (InvalidOperationException)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("File was already downloaded");
+                Console.ResetColor();
+            }
         }
     }
 }
