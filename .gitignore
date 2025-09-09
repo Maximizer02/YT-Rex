@@ -1,4 +1,3 @@
-/BetterYoutubeDownloader/bin
-/BetterYoutubeDownloader/obj
-/BetterYoutubeDownloader/Properties
-.vs
+bin/
+obj/
+.vs/
