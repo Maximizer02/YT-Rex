@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using YTRex.UI;
 
-namespace BetterYoutubeDownloader
+namespace YTRex
 {
     public class Downloader
     {
@@ -28,7 +29,7 @@ namespace BetterYoutubeDownloader
                 string youtubeFolder = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Music\YoutubeDownloads";
                 string[] alreadyDownloadedMedia = Directory.GetFiles(youtubeFolder);
                 ytdlp(getValidLink(), "-x --audio-format mp3 --restrict-filenames --embed-thumbnail --embed-metadata -P ~/Music/YoutubeDownloads ");
-                sanitizeFilenameAndEdit(youtubeFolder, alreadyDownloadedMedia,true);
+                sanitizeFilenameAndEdit(youtubeFolder, alreadyDownloadedMedia, true);
                 Console.WriteLine("Download another?");
             } while (menu.displayMenu() == 0);
             Console.WriteLine();
@@ -80,7 +81,7 @@ namespace BetterYoutubeDownloader
                 && uriResult.Scheme == Uri.UriSchemeHttps;
         }
 
-        private void sanitizeFilenameAndEdit(string youtubeFolder, string[] alreadyDownloadedMedia,bool edit) 
+        private void sanitizeFilenameAndEdit(string youtubeFolder, string[] alreadyDownloadedMedia, bool edit)
         {
             try
             {
@@ -88,8 +89,8 @@ namespace BetterYoutubeDownloader
                 string newFileName = alreadyDownloadedMediaIncludingNew.Where(x => !alreadyDownloadedMedia.Contains(x)).First();
                 string newFileNameSanitized = Regex.Replace(newFileName, @"\[(.*?)\]", "");
                 File.Move(newFileName, newFileNameSanitized);
-                if (edit) 
-                { 
+                if (edit)
+                {
                     Console.WriteLine("Edit Metadata?");
                     if (menu.displayMenu() == 0) editor.editMetadataFromPath(newFileNameSanitized);
                 }

@@ -1,4 +1,5 @@
-﻿using BetterYoutubeDownloader;
+﻿using YTRex;
+using YTRex.UI;
 
 
 List<string> MainMenuItems = new List<string>() { "Youtube Video to Mp3", "Download Youtube Video", "Edit Metadata", "About", "Exit" };

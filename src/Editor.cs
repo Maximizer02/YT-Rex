@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Id3;
-using Id3.Frames;
+﻿using Id3;
+using YTRex.UI;
 
-namespace BetterYoutubeDownloader
+namespace YTRex
 {
     public class Editor
     {
         YesOrNo editMoreDatapoints = new YesOrNo();
-        
+
         public void editMetadataFromConsoleInput()
         {
 
             Console.WriteLine("Enter file name or path:");
             string filePath = Console.ReadLine();
             editMetadata(filePath);
-    
+
         }
         //Want to make it so that when you download a file you can edit the metadata directly by passing the file path into this method.
         //But idk how to get the path from yt-dlp
@@ -33,7 +26,7 @@ namespace BetterYoutubeDownloader
         }
 
 
-        private void editMetadata(string filePath) 
+        private void editMetadata(string filePath)
         {
             Mp3 file;
             try
@@ -72,9 +65,9 @@ namespace BetterYoutubeDownloader
                             string[] newArtists = newArtist!.Split("||");
                             tag.Artists.Value.Clear();
                             foreach (string artist in newArtists)
-                            tag.Artists.Value.Add(artist);
+                                tag.Artists.Value.Add(artist);
 
-                        
+
                             break;
                         case 2: Console.WriteLine("Please enter new Album name:"); tag.Album = Console.ReadLine(); break;
                         case 3: Console.WriteLine("Please enter new Year:"); tag.Year.Value = int.Parse(Console.ReadLine()); break;
@@ -112,16 +105,16 @@ namespace BetterYoutubeDownloader
             if (File.Exists(file)) return new Mp3(file, Mp3Permissions.ReadWrite);
 
             //check if 'file' is a valid file in current directory
-            if (File.Exists(current + @"\"+file)) return new Mp3(current + @"\" + file, Mp3Permissions.ReadWrite);
+            if (File.Exists(current + @"\" + file)) return new Mp3(current + @"\" + file, Mp3Permissions.ReadWrite);
 
             //check if 'file' is the name(without extension) of a valid file in current directory
             List<string> possibleFiles = Directory.GetFiles(current, "*.mp3")
                 .Where(f => f.Substring(current.Length + 1).Split('.')[0].Equals(file))
                 .ToList();
-            if (possibleFiles.Count > 0)  return new Mp3(possibleFiles.First(), Mp3Permissions.ReadWrite); 
+            if (possibleFiles.Count > 0) return new Mp3(possibleFiles.First(), Mp3Permissions.ReadWrite);
 
             throw new FileNotFoundException("This file does not exist!");
         }
-       
+
     }
 }

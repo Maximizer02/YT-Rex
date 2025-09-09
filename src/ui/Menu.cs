@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BetterYoutubeDownloader
+﻿namespace YTRex.UI
 {
     public class Menu
     {
         private List<string> options;
         public Menu(List<string> options) { this.options = options; }
-        public Menu() { options = new List<string>() {"No Options Provided" }; }
+        public Menu() { options = new List<string>() { "No Options Provided" }; }
         public int displayMenu()
         {
             int index = 0;
@@ -65,6 +59,6 @@ namespace BetterYoutubeDownloader
             }
         }
 
-        
+
     }
 }
